@@ -57,6 +57,10 @@ class BodyModel(nn.Module):
         # -- Load SMPL params --
         if bm_fname.endswith('.npz'):
             smpl_dict = np.load(bm_fname, encoding='latin1')
+        elif '.pkl' in bm_fname:
+            import pickle
+            with open(bm_fname, 'rb') as f:
+                smpl_dict = pickle.load(f, encoding='latin1')
         else:
             raise ValueError(f'bm_fname must be a .npz file: {bm_fname}')
 
