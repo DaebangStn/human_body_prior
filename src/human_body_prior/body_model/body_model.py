@@ -100,7 +100,7 @@ class BodyModel(nn.Module):
         if num_betas < 1:
             num_betas = num_total_betas
 
-        shapedirs = smpl_dict['shapedirs'][:, :, :num_betas]
+        shapedirs = np.array(smpl_dict['shapedirs'][:, :, :num_betas])
         self.comp_register('shapedirs', torch.tensor(shapedirs, dtype=dtype), persistent=persistant_buffer)
 
         if self.use_expression:
@@ -123,7 +123,8 @@ class BodyModel(nn.Module):
             self.comp_register('dmpldirs', torch.tensor(dmpldirs, dtype=dtype), persistent=persistant_buffer)
 
         # Regressor for joint locations given shape - 6890 x 24
-        self.comp_register('J_regressor', torch.tensor(smpl_dict['J_regressor'], dtype=dtype), persistent=persistant_buffer)
+        self.comp_register('J_regressor', torch.tensor(smpl_dict['J_regressor'].toarray(), dtype=dtype),
+                           persistent=persistant_buffer)
 
         # Pose blend shape basis: 6890 x 3 x 207, reshaped to 6890*30 x 207
         if use_posedirs:
